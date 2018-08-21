@@ -23,5 +23,5 @@ class Product extends Model
         'quantityInStock',
         'buyPrice',
         'MSRP'
-    ]
+    ];
 }

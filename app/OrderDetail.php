@@ -19,5 +19,9 @@ class OrderDetail extends Model
 	    'quantityOrdered',
 	    'priceEach',
 	    'orderLineNumber'
-	]
+	];
+
+    function product(){
+        return $this->belongsTo('App\Product','productCode','productCode');
+    }
 }

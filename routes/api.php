@@ -20,6 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('v'.env('API_VERSION',1))->group(function () {
 	Route::post('/login','Auth\LoginController@authenticate');
 	Route::get('/customers','CustomerController@getCustomers');
+	Route::get('/products','CustomerController@getProducts');
+	Route::get('/orders','CustomerController@getOrders');
 });
 
 

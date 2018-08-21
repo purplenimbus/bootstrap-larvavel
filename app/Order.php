@@ -21,5 +21,13 @@ class Order extends Model
 	    'status',
 	    'comments',
 	    'customerNumber'
-	]
+	];
+
+	function customer(){
+		return $this->belongsTo('App\Customer','customerNumber','customerNumber');
+	}
+
+	function details(){
+		return $this->belongsTo('App\OrderDetail','orderNumber','orderNumber');
+	}
 }
