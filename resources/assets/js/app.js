@@ -15,6 +15,7 @@ require('angular-sanitize');
 require('ngstorage');
 require('sweetalert');
 require('satellizer');
+require('@uirouter/angularjs');
 
 
 angular.module('jsonarApp', [
@@ -23,17 +24,59 @@ angular.module('jsonarApp', [
 		'ngRoute',
 		'ngStorage',
 		'satellizer',
+		'ui.router'
 	])
-	.config(function($routeProvider,$authProvider) {
+	.config(function($authProvider,$stateProvider,$urlRouterProvider) {
+
 		$authProvider.baseUrl = '';//customer.host;
 		$authProvider.loginUrl = '/api/v1/login';
-    	$routeProvider
-	    .when('/', {
+		$authProvider.storageType = 'localStorage';
+
+		function _skipAuth($q, $state, $auth) {
+		  var defer = $q.defer();
+		  console.log('_skipAuth',$auth.isAuthenticated());
+		  if($auth.isAuthenticated()) {
+		    defer.reject(); /* (1) */
+		  } else {
+		    defer.resolve(); /* (2) */
+		  }
+		  return defer.promise;
+		}
+		 
+		function _redirectAuth($q, $state, $auth,$timeout) {
+		  var defer = $q.defer();
+		  console.log('_redirectAuth',$auth.isAuthenticated());
+		  if($auth.isAuthenticated()) {
+		    defer.resolve(); /* (3) */
+		  } else {
+		    $timeout(function () {
+		      $state.go('/login'); /* (4) */
+		    });
+		    defer.reject();
+		  }
+		  return defer.promise;
+		}
+
+		$stateProvider
+	    .state('/customers', {
+	    	url : '/customers',
 	        templateUrl : 'js/views/main.html',
-	        controller : 'MainCtrl'
+	        controller : 'MainCtrl',
+	        controllerAs : 'main',
+	        resolve : {
+	        	redirectAuth: _redirectAuth
+	        }
 	    })
-	    .when('/login', {
+	    .state('/login', {
+	    	url : '/',
 	        templateUrl : 'js/views/login.html',
-	        controller : 'AuthCtrl'
+	        controller : 'AuthCtrl',
+	      	controllerAs : 'auth',
+	        resolve : {
+	        	skipAuth: _skipAuth
+	        }
 	    });
+	    $urlRouterProvider.otherwise('/');
 	});
+
+

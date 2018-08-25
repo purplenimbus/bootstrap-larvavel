@@ -18,6 +18,6 @@
 
     </head>
     <body ng-app="jsonarApp">
-         <ng-view></ng-view> 
+         <ui-view></ui-view> 
     </body>
 </html>
