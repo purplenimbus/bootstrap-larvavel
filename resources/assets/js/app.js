@@ -78,7 +78,7 @@ angular.module('jsonarApp', [
 	    });
 	    $urlRouterProvider.otherwise('/');
 	})
-	.run(function($rootScope) {
+	.run(function($rootScope,$state) {
 		
 		$rootScope.loading = false;
 
@@ -89,6 +89,8 @@ angular.module('jsonarApp', [
 		$rootScope.$on('$routeChangeSuccess', function() {
 			$rootScope.loading = false;
 		});
+
+		$rootScope.bodyClass = $state.current.controllerAs;
 
 	});
 

@@ -18,8 +18,12 @@ mix.js('resources/assets/js/app.js', 'public/js')
          'resources/assets/js/controllers/auth.js',
    		'resources/assets/js/services/customer.js',
          'resources/assets/js/services/authdata.js',
+         'resources/assets/js/services/modal.js',
    		'resources/assets/js/directives/customers.js',
+         'resources/assets/js/directives/spinner.js',
+         'resources/assets/js/directives/navbar.js',
    		'resources/assets/js/factories/bootstrap4.js',
+         'resources/assets/js/factories/alert.js',
    		], 'public/js/app.js')
    .copy([
    		'resources/assets/js/views/main.html',

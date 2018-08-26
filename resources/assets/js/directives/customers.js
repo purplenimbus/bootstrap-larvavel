@@ -9,7 +9,7 @@ angular.module('jsonarApp')
 	.directive('customers', function (customer) {			
 		return {
 			scope:true,
-			controller : function($scope,customer,bootstrap4){				
+			controller : function($scope,customer,bootstrap4,alert,$compile,modal){				
 				$scope.loading = $scope.loadingOrder = $scope.selectedCustomer = false;
 
 				$scope.init = function(){	
@@ -29,7 +29,7 @@ angular.module('jsonarApp')
 
 				$scope.view = (c) => {
 
-					console.log('view',c);
+					//console.log('view',c);
 					
 					$scope.selectedCustomer = c;
 					$scope.loadingOrder = true;
@@ -37,13 +37,38 @@ angular.module('jsonarApp')
 					.then((result) => {
 						$scope.selectedCustomer.orders = result.data;
 						$scope.loadingOrder = false;
-						console.log('customer order',result);
+						//console.log('customer order',result);
 					})
 					.catch((error) => {
 						//show pop up
 						console.log('getOrders error',error);
 						$scope.loadingOrder = false;
 					});
+				}
+
+				$scope.details = (order,key) => {
+
+					//console.log('order details',order);
+
+					var loop = '',
+						body = '';
+
+					Object.keys(order.details.product).forEach(function(key){
+						loop += '<li class="uk-clearfix list-group-item">';
+						loop += '<div class="float-left text-uppercase">'+key+'</div>';
+						loop += '<div class="float-right">'+order.details.product[key]+'</div>';
+						loop += '</li>';
+					});
+
+					body = bootstrap4.list({
+						ul_class:'list-group-flush',
+						loop : loop
+					});
+
+					modal.modal('small',order.orderNumber,body,false,$scope).then(() => {
+
+					});
+		
 				}
 
 								

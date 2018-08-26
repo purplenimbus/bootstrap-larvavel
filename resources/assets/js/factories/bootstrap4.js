@@ -83,6 +83,31 @@ angular.module('jsonarApp')
 					str += '</address>';
 
 				return str;
+			},
+			table : (key) => {
+				var header = '<table class="table table-responsive table-hover">',
+					body = '';
+
+					header += '<thead>';
+					body += '<tr><th ng-repeat="(key,header) in '+key+'[0]">{{key | uppercase }}</th></tr>';
+					header += '</thead>';
+					body += '<tbody>';
+					body += '<tr ng-repeat="order in '+key+'" ng-click="details(order,$index)"><td ng-repeat="(key,item) in order">{{ item }}</td></tr>';
+					body += '</tbody>';
+					body += '</table>';
+
+					return header+body;
+			},
+			search : (attrs) => {
+				var search = '';
+
+				search += '<form class="form-inline mb-4">';
+				search += '  <input class="form-control mr-sm-2 col-12" type="search" placeholder="Search" aria-label="Search"';	
+				search += attrs.attributes ? attrs.attributes : '';
+				search += '	>';
+				search += '</form>';
+
+				 return search;
 			}
 		};
 	});

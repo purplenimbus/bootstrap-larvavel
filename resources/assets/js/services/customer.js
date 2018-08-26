@@ -20,17 +20,28 @@ angular.module('jsonarApp')
 			return $http.get('api/v1/orders?customerNumber='+customerNumber);
 		}
 
+		this.parseOrderTable = (orders,keys) => {
+			var result = {};
+
+			orders.forEach((key) => {
+				console.log('parseOrderTable',key);
+			});
+
+			return result;
+		}
+
 		this.customersTemplate = () => {
 			var str = '',
 				cardBody = '';
 
-			str += '<div ng-if="loading">loading</div>';
+			str += '<spinner ng-if="loading"></spinner>';
 			str += '<div>';
 			str += '	<div class="row">';
 			str += '		<div class="col-3" ng-if="!customers.data.length && !loading">no customers found</div>';
 			str += '		<div class="col-3" ng-if="customers.data.length">';
+			str +=	bootstrap4.search({attributes:'ng-model="search"'});
 			str += 	bootstrap4.listLink({
-						loop:'<a class="list-group-item list-group-item-action" ng-class="selectedCustomer.customerNumber === customer.customerNumber ? \'active\' : \'\' " ng-repeat="customer in customers.data" ng-click="view(customer)">{{customer.customerName}}</a>'
+						loop:'<a class="list-group-item list-group-item-action" ng-class="selectedCustomer.customerNumber === customer.customerNumber ? \'active\' : \'\' " ng-repeat="customer in customers.data | filter:search" ng-click="view(customer)">{{customer.customerName}}</a>'
 					});
 			str += '		</div>';
 			str += '		<div class="col-9" ng-if="!selectedCustomer && customers.data.length">select a customer</div>';
@@ -60,29 +71,18 @@ angular.module('jsonarApp')
 		}
 
 		this.customersDetails = () => {
-			var str = '',
-				orderBody = '';
+			var str = '';
 
-			str += '<article ng-if="loadingOrder">loading orders</article>';
+			str += '<spinner ng-if="loadingOrder"></spinner>';
 			str += '<article ng-if="selectedCustomer.orders.data.length && !loadingOrder">';
 
 			str += '<div class="row">';
-			str += '<h6 class="text-center text-capitalize">orders</h6>';
 			str += '</div>';
 			str += '<div class="row">';
-			str += '<div class="col-md-4 col-sm-6" ng-repeat="order in selectedCustomer.orders.data">';
-			
-			orderBody += '<h6 class="card-subtitle mb-2 text-muted">order date : {{order.orderDate}}</h6>';
-			orderBody += '<h6 class="card-subtitle mb-2 text-muted">required by : {{order.requiredDate}}</h6>';
-			orderBody += '<h6 class="card-subtitle mb-2 text-muted">shipped date : {{order.shippedDate}}</h6>';
-			orderBody += '';	
 
-			str += 	bootstrap4.card({
-						header:'<h5 class="card-title">{{order.orderNumber}}</h5>',
-						body:orderBody,
-						class:'bg-light mb-3',
-					});
-			str += '</div>';
+			str += 	bootstrap4.table('selectedCustomer.orders.data');
+
+			//str += '</div>';
 			str += '</div>';
 			str += '</aritcle>';
 

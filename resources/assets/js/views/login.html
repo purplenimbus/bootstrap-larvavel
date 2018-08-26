@@ -1,9 +1,11 @@
-{{ loading }}
-<form class="form-signin" ng-if="!loading">
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="text" id="inputEmail" class="form-control" placeholder="Username" ng-model="username" required autofocus>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="password" required>
-    <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="login({username:username,password:password})">Sign in</button>
+<form class="form-signin">
+	<spinner ng-if="loading"></spinner>
+	<span ng-if="!loading">
+	    <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
+	    <label for="inputEmail" class="sr-only">Email address</label>
+	    <input type="text" id="inputEmail" class="form-control" placeholder="Username" ng-model="username" required autofocus>
+	    <label for="inputPassword" class="sr-only">Password</label>
+	    <input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="password" required>
+	    <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="login({username:username,password:password})">Sign in</button>
+	</span>
 </form>

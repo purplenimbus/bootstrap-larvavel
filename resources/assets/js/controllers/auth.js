@@ -8,7 +8,8 @@
  * Controller of the jsonarApp
  */
 angular.module('jsonarApp')
- 	.controller('AuthCtrl', ($scope,$auth,authdata,$rootScope,$state) => {
+ 	.controller('AuthCtrl', ($scope,$auth,authdata,$rootScope,$state,$location) => {
+ 		console.log('auth',$location);
  		$scope.loading = false;
  		$scope.login = (creds) => {
 
