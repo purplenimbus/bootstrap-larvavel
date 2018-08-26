@@ -22844,9 +22844,9 @@ angular.module('jsonarApp', ['ngAnimate', 'ngSanitize', 'ngRoute', 'ngStorage', 
 				var defer = $q.defer();
 				console.log('_skipAuth', $auth.isAuthenticated());
 				if ($auth.isAuthenticated()) {
-						defer.reject(); /* (1) */
+						defer.reject();
 				} else {
-						defer.resolve(); /* (2) */
+						defer.resolve();
 				}
 				return defer.promise;
 		}
@@ -22855,10 +22855,10 @@ angular.module('jsonarApp', ['ngAnimate', 'ngSanitize', 'ngRoute', 'ngStorage', 
 				var defer = $q.defer();
 				console.log('_redirectAuth', $auth.isAuthenticated());
 				if ($auth.isAuthenticated()) {
-						defer.resolve(); /* (3) */
+						defer.resolve();
 				} else {
 						$timeout(function () {
-								$state.go('/login'); /* (4) */
+								$state.go('/login');
 						});
 						defer.reject();
 				}
@@ -93430,7 +93430,7 @@ angular.module('jsonarApp').service('customer', function ($http, bootstrap4) {
  * Service in the jsonarApp.
  */
 
-angular.module('jsonarApp').service('authdata', function ($localStorage, $rootScope, $auth) {
+angular.module('jsonarApp').service('authdata', function ($localStorage, $rootScope, $auth, $http) {
 	this.login = function (creds) {
 		return $auth.login(creds);
 	};
@@ -93443,7 +93443,7 @@ angular.module('jsonarApp').service('authdata', function ($localStorage, $rootSc
 
 	this.setUser = function (user) {
 		$localStorage.auth = JSON.stringify(user);
-		$rootScope.user = JSON.parse($localStorage.auth) || false;
+		$rootScope.user = user || false;
 	};
 });
 
@@ -93544,8 +93544,6 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 
 			$scope.details = function (order, key) {
 
-				//console.log('order details',order);
-
 				var loop = '',
 				    body = '';
 
@@ -93565,8 +93563,6 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 			};
 
 			$scope.init();
-
-			console.log('customers', $scope);
 		},
 
 		template: customer.customersTemplate(),
@@ -93614,22 +93610,35 @@ angular.module('jsonarApp').directive('spinner', function () {
  */
 
 angular.module('jsonarApp').directive('navbar', function () {
-  var template = '<nav class="navbar navbar-dark bg-primary">';
-  template += '	<div class="container">';
-  template += '		<a class="navbar-brand" href="#">Navbar</a>';
-  template += '		<span class="navbar-text">';
-  template += '		{{user.username || \'\'}}';
-  template += '		</span>';
-  template += '		<form class="form-inline">';
-  template += '		<button class="btn btn-outline-danger my-2 my-sm-0" ng-click="logout()">logout</button>';
-  template += '		</form>';
-  template += '	</div>';
-  template += '</nav>';
+	var template = '<nav class="navbar navbar-dark bg-primary">';
+	template += '	<div class="container">';
+	template += '		<a class="navbar-brand text-capitalize" href="#">customer directory</a>';
+	template += '		<form class="form-inline">';
+	template += '		<button class="btn btn-outline-light my-2 my-sm-0 text-uppercase" ng-click="logout()" ng-if="loggedin">logout {{ user.username }}</button>';
+	template += '		</form>';
+	template += '	</div>';
+	template += '</nav>';
 
-  return {
-    template: template,
-    restrict: 'E'
-  };
+	return {
+		template: template,
+		scope: true,
+		controller: function controller($scope, $auth, $localStorage, authdata, $rootScope, $state) {
+			console.log('navbar', $rootScope, $localStorage);
+			$scope.loggedin = $auth.isAuthenticated();
+			$scope.user = $scope.loggedin ? JSON.parse($localStorage.auth) : false;
+			$scope.logout = function () {
+				$auth.logout();
+				authdata.clearUser();
+				$state.go('/login');
+			};
+		},
+		restrict: 'E',
+		link: function postLink(scope, element) {
+			element.on('$destroy', function () {
+				scope.$destroy();
+			});
+		}
+	};
 });
 
 /***/ }),

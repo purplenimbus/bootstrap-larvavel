@@ -8,7 +8,7 @@
  * Service in the jsonarApp.
  */
 angular.module('jsonarApp')
-	.service('authdata',function($localStorage,$rootScope,$auth){
+	.service('authdata',function($localStorage,$rootScope,$auth,$http){
 		this.login = (creds) => {
 			return $auth.login(creds);
 		};
@@ -21,7 +21,7 @@ angular.module('jsonarApp')
 
 		this.setUser = (user) => {
     		$localStorage.auth = JSON.stringify(user);
-    		$rootScope.user = JSON.parse($localStorage.auth) || false;
+    		$rootScope.user = user || false;
     	};
 
 	});

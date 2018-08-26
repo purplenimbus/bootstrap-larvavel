@@ -49,8 +49,6 @@ angular.module('jsonarApp')
 
 				$scope.details = (order,key) => {
 
-					//console.log('order details',order);
-
 					var loop = '',
 						body = '';
 
@@ -74,8 +72,6 @@ angular.module('jsonarApp')
 
 								
 				$scope.init();
-
-				console.log('customers',$scope);
 				
 			},
 

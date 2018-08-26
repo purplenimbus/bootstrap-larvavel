@@ -36,9 +36,9 @@ angular.module('jsonarApp', [
 		  var defer = $q.defer();
 		  console.log('_skipAuth',$auth.isAuthenticated());
 		  if($auth.isAuthenticated()) {
-		    defer.reject(); /* (1) */
+		    defer.reject();
 		  } else {
-		    defer.resolve(); /* (2) */
+		    defer.resolve();
 		  }
 		  return defer.promise;
 		}
@@ -47,10 +47,10 @@ angular.module('jsonarApp', [
 		  var defer = $q.defer();
 		  console.log('_redirectAuth',$auth.isAuthenticated());
 		  if($auth.isAuthenticated()) {
-		    defer.resolve(); /* (3) */
+		    defer.resolve(); 
 		  } else {
 		    $timeout(function () {
-		      $state.go('/login'); /* (4) */
+		      $state.go('/login'); 
 		    });
 		    defer.reject();
 		  }
