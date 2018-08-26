@@ -9,7 +9,7 @@
  */
 angular.module('jsonarApp')
  	.controller('AuthCtrl', ($scope,$auth,authdata,$rootScope,$state,$location) => {
- 		console.log('auth',$location);
+ 		$scope.bodyId = 'login';
  		$scope.loading = false;
  		$scope.login = (creds) => {
 

@@ -52,7 +52,7 @@ angular.module('jsonarApp')
 					var loop = '',
 						body = '';
 
-						console.log('details',order,key);
+						//console.log('details',order,key);
 
 					loop += '<li class="uk-clearfix list-group-item" ng-repeat="(key,value) in selectedCustomer.orders.data['+key+'].details.product">';
 					loop += '<div class="float-left text-uppercase text-muted">{{ key }}</div>';

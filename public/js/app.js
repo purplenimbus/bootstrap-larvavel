@@ -22872,7 +22872,8 @@ angular.module('jsonarApp', ['ngAnimate', 'ngSanitize', 'ngRoute', 'ngStorage', 
 				controllerAs: 'main',
 				resolve: {
 						redirectAuth: _redirectAuth
-				}
+				},
+				class: 'customers'
 		}).state('/login', {
 				url: '/',
 				templateUrl: 'js/views/login.html',
@@ -22880,10 +22881,11 @@ angular.module('jsonarApp', ['ngAnimate', 'ngSanitize', 'ngRoute', 'ngStorage', 
 				controllerAs: 'auth',
 				resolve: {
 						skipAuth: _skipAuth
-				}
+				},
+				class: 'login'
 		});
 		$urlRouterProvider.otherwise('/');
-}).run(function ($rootScope, $state) {
+}).run(function ($rootScope, $state, $location, $route) {
 
 		$rootScope.loading = false;
 
@@ -22894,8 +22896,6 @@ angular.module('jsonarApp', ['ngAnimate', 'ngSanitize', 'ngRoute', 'ngStorage', 
 		$rootScope.$on('$routeChangeSuccess', function () {
 				$rootScope.loading = false;
 		});
-
-		$rootScope.bodyClass = $state.current.controllerAs;
 });
 
 /***/ }),
@@ -93296,7 +93296,7 @@ angular.module('jsonarApp').controller('MainCtrl', function ($scope) {});
  */
 
 angular.module('jsonarApp').controller('AuthCtrl', function ($scope, $auth, authdata, $rootScope, $state, $location) {
-  console.log('auth', $location);
+  $scope.bodyId = 'login';
   $scope.loading = false;
   $scope.login = function (creds) {
 
@@ -93485,7 +93485,7 @@ angular.module('jsonarApp').service('modal', function (bootstrap4, $compile, $q)
 		str += '<div id="modal" class="modal fade" tabindex="-1" role="dialog">';
 		str += '<div class="modal-dialog ' + (attrs.type === 'small' ? 'modal-sm' : attrs.type === 'large ' ? 'modal-lg' : '') + '" role="document">';
 		str += '<div class="modal-content">';
-		str += '<div class="modal-header">';
+		str += '<div class="modal-header bg-primary text-white">';
 		str += attrs.title ? '<h5 class="modal-title">' + attrs.title + '</h5>' : '';
 		str += '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 		str += '</div>';
@@ -93552,7 +93552,7 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 				var loop = '',
 				    body = '';
 
-				console.log('details', order, key);
+				//console.log('details',order,key);
 
 				loop += '<li class="uk-clearfix list-group-item" ng-repeat="(key,value) in selectedCustomer.orders.data[' + key + '].details.product">';
 				loop += '<div class="float-left text-uppercase text-muted">{{ key }}</div>';
@@ -93606,8 +93606,8 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 
 angular.module('jsonarApp').directive('spinner', function () {
 	return {
-		//template: '<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>',
-		template: 'show spinner',
+		template: '<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>',
+		//template:'show spinner',
 		restrict: 'E'
 	};
 });

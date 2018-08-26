@@ -65,7 +65,8 @@ angular.module('jsonarApp', [
 	        controllerAs : 'main',
 	        resolve : {
 	        	redirectAuth: _redirectAuth
-	        }
+	        },
+	        class:'customers'
 	    })
 	    .state('/login', {
 	    	url : '/',
@@ -74,12 +75,13 @@ angular.module('jsonarApp', [
 	      	controllerAs : 'auth',
 	        resolve : {
 	        	skipAuth: _skipAuth
-	        }
+	        },
+	        class:'login'
 	    });
 	    $urlRouterProvider.otherwise('/');
 	})
-	.run(function($rootScope,$state) {
-		
+	.run(function($rootScope,$state,$location,$route) {
+
 		$rootScope.loading = false;
 
 		$rootScope.$on('$routeChangeStart', function() { 
@@ -89,8 +91,6 @@ angular.module('jsonarApp', [
 		$rootScope.$on('$routeChangeSuccess', function() {
 			$rootScope.loading = false;
 		});
-
-		$rootScope.bodyClass = $state.current.controllerAs;
 
 	});
 

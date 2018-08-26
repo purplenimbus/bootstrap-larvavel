@@ -30,7 +30,7 @@ angular.module('jsonarApp')
 				str	+=	'<div id="modal" class="modal fade" tabindex="-1" role="dialog">';
 				str	+=		'<div class="modal-dialog '+((attrs.type === 'small') ? 'modal-sm' : ( attrs.type === 'large ') ? 'modal-lg' : '' )+'" role="document">';
 				str	+=			'<div class="modal-content">';
-				str	+=				'<div class="modal-header">';
+				str	+=				'<div class="modal-header bg-primary text-white">';
 				str	+=					attrs.title ? '<h5 class="modal-title">'+attrs.title+'</h5>' : '';
 				str	+=					'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 				str	+=				'</div>';
