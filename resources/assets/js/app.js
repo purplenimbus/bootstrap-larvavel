@@ -77,6 +77,19 @@ angular.module('jsonarApp', [
 	        }
 	    });
 	    $urlRouterProvider.otherwise('/');
+	})
+	.run(function($rootScope) {
+		
+		$rootScope.loading = false;
+
+		$rootScope.$on('$routeChangeStart', function() { 
+   			$rootScope.loading = true;
+		});
+
+		$rootScope.$on('$routeChangeSuccess', function() {
+			$rootScope.loading = false;
+		});
+
 	});
 
 

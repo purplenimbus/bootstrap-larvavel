@@ -21,10 +21,10 @@ class CustomerController extends Controller
 		}
 
 		if(sizeof($query)){
-			return Order::with(['customer','details.product'])->where($query)->paginate(10);
+			return Order::with(['details.product'])->where($query)->paginate(10);
 		}
 
-    	return Order::with(['customer','details.product'])->paginate(10);
+    	return Order::with(['details.product'])->paginate(10);
     }
 
     public function getProducts(Request $request){

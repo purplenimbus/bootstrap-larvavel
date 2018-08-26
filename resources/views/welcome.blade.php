@@ -18,6 +18,7 @@
 
     </head>
     <body ng-app="jsonarApp">
-         <ui-view></ui-view> 
+        <div ng-if="$root.loading">loading</div>
+         <ui-view ng-if="!$root.loading" class="container"></ui-view> 
     </body>
 </html>
