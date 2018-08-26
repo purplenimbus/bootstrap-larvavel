@@ -93462,34 +93462,39 @@ angular.module('jsonarApp').service('authdata', function ($localStorage, $rootSc
  * Service in the jsonarApp.
  */
 
-angular.module('jsonarApp').service('modal', function (bootstrap4, $compile) {
-	this.modal = function (type, title, body, footer, $scope) {
+angular.module('jsonarApp').service('modal', function (bootstrap4, $compile, $q) {
+	var _this = this;
 
-		var str = '',
-		    deferred = $q.defer();
+	this.modal = function (attrs, $scope) {
 
-		str += '<div id="modal" class="modal fade" tabindex="-1" role="dialog">';
-		str += '<div class="modal-dialog ' + (type === 'small' ? 'modal-sm' : type === 'large ' ? 'modal-lg' : '') + '" role="document">';
-		str += '<div class="modal-content">';
-		str += '<div class="modal-header">';
-		str += '<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="closeModal($event)"><span aria-hidden="true">&times;</span></button>';
-		str += '<h4 class="modal-title">' + title + '</h4>';
-		str += '</div>';
-		str += '<div class="modal-body">' + body + '</div>';
-		str += footer ? '<div class="modal-footer">' + footer + '</div>' : '';
-		str += '</div>';
-		str += '</div>';
-		str += '</div>';
+		var deferred = $q.defer();
 
-		angular.element('body').append($compile(str)($scope));
+		angular.element('body').append($compile(_this.template(attrs))($scope));
 
-		deferred.resolve(str);
+		deferred.resolve(true);
 
 		angular.element('#modal').modal('show').on('hidden.bs.modal', function () {
 			this.remove();
 		});
 
 		return deferred.promise;
+	};
+
+	this.template = function (attrs) {
+		var str = '';
+		str += '<div id="modal" class="modal fade" tabindex="-1" role="dialog">';
+		str += '<div class="modal-dialog ' + (attrs.type === 'small' ? 'modal-sm' : attrs.type === 'large ' ? 'modal-lg' : '') + '" role="document">';
+		str += '<div class="modal-content">';
+		str += '<div class="modal-header">';
+		str += attrs.title ? '<h5 class="modal-title">' + attrs.title + '</h5>' : '';
+		str += '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+		str += '</div>';
+		str += attrs.body ? '<div class="modal-body">' + attrs.body + '</div>' : '';
+		str += attrs.footer ? '<div class="modal-footer">' + attrs.footer + '</div>' : '';
+		str += '</div>';
+		str += '</div>';
+		str += '</div>';
+		return str;
 	};
 });
 
@@ -93517,7 +93522,7 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 				customer.getCustomers().then(function (result) {
 					$scope.loading = false;
 					$scope.customers = result.data;
-					$scope.selectedCustomer = $scope.customers.data[0];
+					$scope.view($scope.customers.data[0]);
 				}).catch(function (error) {
 					$scope.loading = false;
 					//do something
@@ -93547,19 +93552,30 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 				var loop = '',
 				    body = '';
 
-				Object.keys(order.details.product).forEach(function (key) {
-					loop += '<li class="uk-clearfix list-group-item">';
-					loop += '<div class="float-left text-uppercase">' + key + '</div>';
-					loop += '<div class="float-right">' + order.details.product[key] + '</div>';
-					loop += '</li>';
+				console.log('details', order, key);
+
+				loop += '<li class="uk-clearfix list-group-item" ng-repeat="(key,value) in selectedCustomer.orders.data[' + key + '].details.product">';
+				loop += '<div class="float-left text-uppercase text-muted">{{ key }}</div>';
+				loop += '<div class="float-right">{{ value }}</div>';
+				loop += '</li>';
+
+				body += bootstrap4.address({
+					title: '{{selectedCustomer.customerName}}',
+					street: '{{selectedCustomer.addressLine1}} {{selectedCustomer.addressLine2}}',
+					city: '{{selectedCustomer.city}}',
+					state: '{{selectedCustomer.state}} , {{selectedCustomer.country}}',
+					phone: '{{selectedCustomer.phone}}'
 				});
 
-				body = bootstrap4.list({
-					ul_class: 'list-group-flush',
+				body += bootstrap4.list({
+					ul_class: 'class="list-group list-group-flush"',
 					loop: loop
 				});
 
-				modal.modal('small', order.orderNumber, body, false, $scope).then(function () {});
+				modal.modal({
+					title: '{{selectedCustomer.orders.data[' + key + '].orderNumber}}',
+					body: body
+				}, $scope).then(function () {});
 			};
 
 			$scope.init();
@@ -93750,20 +93766,22 @@ angular.module('jsonarApp').factory('bootstrap4', function () {
 			header += '<thead>';
 			//body += '<tr><th ng-repeat="(key,header) in '+key+'[0]">{{key | uppercase }}</th></tr>';
 			body += '<tr>';
-			body += '<th>{{\'order number\'|uppercase}}</th>';
-			body += '<th>{{\'order date\'|uppercase}}</th>';
-			body += '<th>{{\'order status\'|uppercase}}</th>';
-			body += '<th>{{\'required date\'|uppercase}}</th>';
+			body += '	<th>{{\'order number\'|uppercase}}</th>';
+			body += '	<th>{{\'order date\'|uppercase}}</th>';
+			body += '	<th>{{\'order status\'|uppercase}}</th>';
+			body += '	<th>{{\'required date\'|uppercase}}</th>';
+			body += '	<th>{{\'comments\'|uppercase}}</th>';
 			body += '</tr>';
 			header += '</thead>';
 			body += '<tbody>';
 			//body += '<tr ng-repeat="order in '+key+'" ng-click="details(order,$index)"><td ng-repeat="(key,item) in order">{{ item }}</td></tr>';
 
-			body += '<tr ng-repeat="order in ' + key + '">';
-			body += '<td>{{ order.orderNumber }}</td>';
-			body += '<td>{{ order.orderDate }}</td>';
-			body += '<td>{{ order.status }}</td>';
-			body += '<td>{{ order.requiredDate }}</td>';
+			body += '<tr ng-repeat="order in ' + key + '" ng-click="details(order,$index)">';
+			body += '	<td>{{ order.orderNumber }}</td>';
+			body += '	<td>{{ order.orderDate }}</td>';
+			body += '	<td>{{ order.status }}</td>';
+			body += '	<td>{{ order.requiredDate }}</td>';
+			body += '	<td>{{ order.comments }}</td>';
 			body += '</tr>';
 
 			body += '</tbody>';

@@ -94,20 +94,22 @@ angular.module('jsonarApp')
 					header += '<thead>';
 					//body += '<tr><th ng-repeat="(key,header) in '+key+'[0]">{{key | uppercase }}</th></tr>';
 					body += '<tr>';
-					body += '<th>{{\'order number\'|uppercase}}</th>';
-					body += '<th>{{\'order date\'|uppercase}}</th>';
-					body += '<th>{{\'order status\'|uppercase}}</th>';
-					body += '<th>{{\'required date\'|uppercase}}</th>';
+					body += '	<th>{{\'order number\'|uppercase}}</th>';
+					body += '	<th>{{\'order date\'|uppercase}}</th>';
+					body += '	<th>{{\'order status\'|uppercase}}</th>';
+					body += '	<th>{{\'required date\'|uppercase}}</th>';
+					body += '	<th>{{\'comments\'|uppercase}}</th>';
 					body += '</tr>';
 					header += '</thead>';
 					body += '<tbody>';
 					//body += '<tr ng-repeat="order in '+key+'" ng-click="details(order,$index)"><td ng-repeat="(key,item) in order">{{ item }}</td></tr>';
 					
-					body += '<tr ng-repeat="order in '+key+'">';
-					body += '<td>{{ order.orderNumber }}</td>';
-					body += '<td>{{ order.orderDate }}</td>';
-					body += '<td>{{ order.status }}</td>';
-					body += '<td>{{ order.requiredDate }}</td>';
+					body += '<tr ng-repeat="order in '+key+'" ng-click="details(order,$index)">';
+					body += '	<td>{{ order.orderNumber }}</td>';
+					body += '	<td>{{ order.orderDate }}</td>';
+					body += '	<td>{{ order.status }}</td>';
+					body += '	<td>{{ order.requiredDate }}</td>';
+					body += '	<td>{{ order.comments }}</td>';
 					body += '</tr>';
 
 

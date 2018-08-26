@@ -18,7 +18,7 @@ angular.module('jsonarApp')
 						.then((result) => {
 							$scope.loading = false;
 							$scope.customers = result.data;
-							$scope.selectedCustomer = $scope.customers.data[0];
+							$scope.view($scope.customers.data[0]);
 						})
 						.catch((error) => {
 							$scope.loading = false;
@@ -52,21 +52,30 @@ angular.module('jsonarApp')
 					var loop = '',
 						body = '';
 
-					Object.keys(order.details.product).forEach(function(key){
-						loop += '<li class="uk-clearfix list-group-item">';
-						loop += '<div class="float-left text-uppercase">'+key+'</div>';
-						loop += '<div class="float-right">'+order.details.product[key]+'</div>';
-						loop += '</li>';
-					});
+						console.log('details',order,key);
 
-					body = bootstrap4.list({
-						ul_class:'list-group-flush',
+					loop += '<li class="uk-clearfix list-group-item" ng-repeat="(key,value) in selectedCustomer.orders.data['+key+'].details.product">';
+					loop += '<div class="float-left text-uppercase text-muted">{{ key }}</div>';
+					loop += '<div class="float-right">{{ value }}</div>';
+					loop += '</li>';
+
+					body += bootstrap4.address({
+								title:'{{selectedCustomer.customerName}}',
+								street:'{{selectedCustomer.addressLine1}} {{selectedCustomer.addressLine2}}',
+								city:'{{selectedCustomer.city}}',
+								state:'{{selectedCustomer.state}} , {{selectedCustomer.country}}',
+								phone:'{{selectedCustomer.phone}}'
+							});
+
+					body += bootstrap4.list({
+						ul_class:'class="list-group list-group-flush"',
 						loop : loop
 					});
 
-					modal.modal('small',order.orderNumber,body,false,$scope).then(() => {
-
-					});
+					modal.modal({
+						title:'{{selectedCustomer.orders.data['+key+'].orderNumber}}',
+						body:body
+					},$scope).then(() => {});
 		
 				}
 
