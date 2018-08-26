@@ -93489,7 +93489,7 @@ angular.module('jsonarApp').service('modal', function (bootstrap4, $compile, $q)
 		str += attrs.title ? '<h5 class="modal-title">' + attrs.title + '</h5>' : '';
 		str += '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 		str += '</div>';
-		str += attrs.body ? '<div class="modal-body">' + attrs.body + '</div>' : '';
+		str += attrs.body ? '<div class="modal-body p-0">' + attrs.body + '</div>' : '';
 		str += attrs.footer ? '<div class="modal-footer">' + attrs.footer + '</div>' : '';
 		str += '</div>';
 		str += '</div>';
@@ -93559,13 +93559,13 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 				loop += '<div class="float-right">{{ value }}</div>';
 				loop += '</li>';
 
-				body += bootstrap4.address({
-					title: '{{selectedCustomer.customerName}}',
-					street: '{{selectedCustomer.addressLine1}} {{selectedCustomer.addressLine2}}',
-					city: '{{selectedCustomer.city}}',
-					state: '{{selectedCustomer.state}} , {{selectedCustomer.country}}',
-					phone: '{{selectedCustomer.phone}}'
-				});
+				/*body += bootstrap4.address({
+    			title:'{{selectedCustomer.customerName}}',
+    			street:'{{selectedCustomer.addressLine1}} {{selectedCustomer.addressLine2}}',
+    			city:'{{selectedCustomer.city}}',
+    			state:'{{selectedCustomer.state}} , {{selectedCustomer.country}}',
+    			phone:'{{selectedCustomer.phone}}'
+    		});*/
 
 				body += bootstrap4.list({
 					ul_class: 'class="list-group list-group-flush"',
@@ -93573,7 +93573,7 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 				});
 
 				modal.modal({
-					title: '{{selectedCustomer.orders.data[' + key + '].orderNumber}}',
+					title: '{{\'product details\' | uppercase }}',
 					body: body
 				}, $scope).then(function () {});
 			};

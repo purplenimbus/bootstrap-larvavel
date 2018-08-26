@@ -59,13 +59,13 @@ angular.module('jsonarApp')
 					loop += '<div class="float-right">{{ value }}</div>';
 					loop += '</li>';
 
-					body += bootstrap4.address({
+					/*body += bootstrap4.address({
 								title:'{{selectedCustomer.customerName}}',
 								street:'{{selectedCustomer.addressLine1}} {{selectedCustomer.addressLine2}}',
 								city:'{{selectedCustomer.city}}',
 								state:'{{selectedCustomer.state}} , {{selectedCustomer.country}}',
 								phone:'{{selectedCustomer.phone}}'
-							});
+							});*/
 
 					body += bootstrap4.list({
 						ul_class:'class="list-group list-group-flush"',
@@ -73,7 +73,7 @@ angular.module('jsonarApp')
 					});
 
 					modal.modal({
-						title:'{{selectedCustomer.orders.data['+key+'].orderNumber}}',
+						title:'{{\'product details\' | uppercase }}',
 						body:body
 					},$scope).then(() => {});
 		

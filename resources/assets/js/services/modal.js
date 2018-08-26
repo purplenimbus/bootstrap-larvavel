@@ -34,7 +34,7 @@ angular.module('jsonarApp')
 				str	+=					attrs.title ? '<h5 class="modal-title">'+attrs.title+'</h5>' : '';
 				str	+=					'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 				str	+=				'</div>';
-				str	+=				attrs.body ? '<div class="modal-body">'+attrs.body+'</div>' : '';
+				str	+=				attrs.body ? '<div class="modal-body p-0">'+attrs.body+'</div>' : '';
 				str	+=				attrs.footer ? '<div class="modal-footer">'+attrs.footer+'</div>' : '';
 				str	+=			'</div>';
 				str	+=		'</div>';
