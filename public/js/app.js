@@ -93517,6 +93517,7 @@ angular.module('jsonarApp').directive('customers', function (customer) {
 				customer.getCustomers().then(function (result) {
 					$scope.loading = false;
 					$scope.customers = result.data;
+					$scope.selectedCustomer = $scope.customers.data[0];
 				}).catch(function (error) {
 					$scope.loading = false;
 					//do something
@@ -93732,15 +93733,30 @@ angular.module('jsonarApp').factory('bootstrap4', function () {
 
 			return str;
 		}),
+		collapse: function collapse() {},
 		table: function table(key) {
-			var header = '<table class="table table-responsive table-hover">',
+			var header = '<table class="table table-hover col-12">',
 			    body = '';
 
 			header += '<thead>';
-			body += '<tr><th ng-repeat="(key,header) in ' + key + '[0]">{{key | uppercase }}</th></tr>';
+			//body += '<tr><th ng-repeat="(key,header) in '+key+'[0]">{{key | uppercase }}</th></tr>';
+			body += '<tr>';
+			body += '<th>{{\'order number\'|uppercase}}</th>';
+			body += '<th>{{\'order date\'|uppercase}}</th>';
+			body += '<th>{{\'order status\'|uppercase}}</th>';
+			body += '<th>{{\'required date\'|uppercase}}</th>';
+			body += '</tr>';
 			header += '</thead>';
 			body += '<tbody>';
-			body += '<tr ng-repeat="order in ' + key + '" ng-click="details(order,$index)"><td ng-repeat="(key,item) in order">{{ item }}</td></tr>';
+			//body += '<tr ng-repeat="order in '+key+'" ng-click="details(order,$index)"><td ng-repeat="(key,item) in order">{{ item }}</td></tr>';
+
+			body += '<tr ng-repeat="order in ' + key + '">';
+			body += '<td>{{ order.orderNumber }}</td>';
+			body += '<td>{{ order.orderDate }}</td>';
+			body += '<td>{{ order.status }}</td>';
+			body += '<td>{{ order.requiredDate }}</td>';
+			body += '</tr>';
+
 			body += '</tbody>';
 			body += '</table>';
 

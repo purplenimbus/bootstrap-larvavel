@@ -18,6 +18,7 @@ angular.module('jsonarApp')
 						.then((result) => {
 							$scope.loading = false;
 							$scope.customers = result.data;
+							$scope.selectedCustomer = $scope.customers.data[0];
 						})
 						.catch((error) => {
 							$scope.loading = false;
