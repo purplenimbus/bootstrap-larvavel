@@ -1,6 +1,12 @@
 <div class="container py-4">
 	<form class="form-signin">
 		<spinner ng-if="loading"></spinner>
+		<div ng-if="!loading && error" class="alert alert-danger alert-dismissible fade show" role="alert">
+		  <strong>{{error.statusText}}</strong> {{ error.data.message || error.data.error}}
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    <span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
 		<span ng-if="!loading">
 		    <h1 class="h3 mb-3 font-weight-normal text-center">Please sign in</h1>
 		    <label for="inputEmail" class="sr-only">Email address</label>

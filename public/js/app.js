@@ -93297,10 +93297,11 @@ angular.module('jsonarApp').controller('MainCtrl', function ($scope) {});
 
 angular.module('jsonarApp').controller('AuthCtrl', function ($scope, $auth, authdata, $rootScope, $state, $location) {
   $scope.bodyId = 'login';
-  $scope.loading = false;
+  $scope.loading = $scope.error = false;
   $scope.login = function (creds) {
 
     $scope.loading = true;
+    $scope.error = false;
 
     authdata.login(creds).then(function (result) {
       $scope.loading = false;
@@ -93312,6 +93313,7 @@ angular.module('jsonarApp').controller('AuthCtrl', function ($scope, $auth, auth
       $state.go('/customers');
     }).catch(function (error) {
       $scope.loading = false;
+      $scope.error = error;
       console.log('login error', error);
     });
   };

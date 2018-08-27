@@ -10,10 +10,11 @@
 angular.module('jsonarApp')
  	.controller('AuthCtrl', ($scope,$auth,authdata,$rootScope,$state,$location) => {
  		$scope.bodyId = 'login';
- 		$scope.loading = false;
+ 		$scope.loading = $scope.error = false;
  		$scope.login = (creds) => {
 
  			$scope.loading = true;
+ 			$scope.error = false;
 
  			authdata.login(creds)
  				.then((result) => {
@@ -25,6 +26,7 @@ angular.module('jsonarApp')
  				})
  				.catch((error) => {
  					$scope.loading = false;
+ 					$scope.error = error;
  					console.log('login error',error);
  				});
  		}
