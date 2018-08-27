@@ -41,7 +41,7 @@ angular.module('jsonarApp')
 			str += '		<div class="col-3" ng-if="customers.data.length">';
 			str +=	bootstrap4.search({attributes:'ng-model="search"'});
 			str += 	bootstrap4.listLink({
-						loop:'<a class="list-group-item list-group-item-action" ng-class="selectedCustomer.customerNumber === customer.customerNumber ? \'active\' : \'\' " ng-repeat="customer in customers.data | filter:search" ng-click="view(customer)">{{customer.customerName}}</a>'
+						loop:'<a class="list-group-item list-group-item-action" ng-class="selectedCustomer.customerNumber === customer.customerNumber ? \'active text-white font-weight-bold\' : \'\' " ng-repeat="customer in customers.data | filter:search" ng-click="view(customer)">{{customer.customerName}}</a>'
 					});
 			str += '		</div>';
 			str += '		<div class="col-9" ng-if="!selectedCustomer && customers.data.length">select a customer</div>';
