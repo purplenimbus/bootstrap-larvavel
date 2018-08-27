@@ -93265,79 +93265,584 @@ __WEBPACK_IMPORTED_MODULE_0__angular__["a" /* ng */].module('ui.router.state').p
 
 /***/ }),
 /* 115 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\controllers\\main.js'");
+
+
+/**
+ * @ngdoc function
+ * @name jsonarApp.controller:MainCtrl
+ * @description
+ * # MainCtrl
+ * Controller of the jsonarApp
+ */
+
+angular.module('jsonarApp').controller('MainCtrl', function ($scope) {});
 
 /***/ }),
 /* 116 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\controllers\\auth.js'");
+
+
+/**
+ * @ngdoc function
+ * @name jsonarApp.controller:AuthCtrl
+ * @description
+ * # AuthCtrl
+ * Controller of the jsonarApp
+ */
+
+angular.module('jsonarApp').controller('AuthCtrl', function ($scope, $auth, authdata, $rootScope, $state, $location) {
+  $scope.bodyId = 'login';
+  $scope.loading = false;
+  $scope.login = function (creds) {
+
+    $scope.loading = true;
+
+    authdata.login(creds).then(function (result) {
+      $scope.loading = false;
+
+      if (result.data.user) {
+        authdata.setUser(result.data.user);
+      }
+
+      $state.go('/customers');
+    }).catch(function (error) {
+      $scope.loading = false;
+      console.log('login error', error);
+    });
+  };
+});
 
 /***/ }),
 /* 117 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\services\\customer.js'");
+
+
+/**
+ * @ngdoc service
+ * @name nimbusEmsApp.customerService
+ * @description
+ * # customerService
+ * Service in the jsonarApp.
+ */
+
+angular.module('jsonarApp').service('customer', function ($http, bootstrap4) {
+			var _this = this;
+
+			this.host = 'http://127.0.0.1:8000/';
+
+			this.getCustomers = function () {
+						return $http.get('api/v1/customers');
+			};
+
+			this.getOrders = function (customerNumber) {
+						return $http.get('api/v1/orders?customerNumber=' + customerNumber);
+			};
+
+			this.parseOrderTable = function (orders, keys) {
+						var result = {};
+
+						orders.forEach(function (key) {
+									console.log('parseOrderTable', key);
+						});
+
+						return result;
+			};
+
+			this.customersTemplate = function () {
+						var str = '',
+						    cardBody = '';
+
+						str += '<spinner ng-if="loading"></spinner>';
+						str += '<div>';
+						str += '	<div class="row">';
+						str += '		<div class="col-3" ng-if="!customers.data.length && !loading">no customers found</div>';
+						str += '		<div class="col-3" ng-if="customers.data.length">';
+						str += bootstrap4.search({ attributes: 'ng-model="search"' });
+						str += bootstrap4.listLink({
+									loop: '<a class="list-group-item list-group-item-action" ng-class="selectedCustomer.customerNumber === customer.customerNumber ? \'active text-white font-weight-bold\' : \'\' " ng-repeat="customer in customers.data | filter:search" ng-click="view(customer)">{{customer.customerName}}</a>'
+						});
+						str += '		</div>';
+						str += '		<div class="col-9" ng-if="!selectedCustomer && customers.data.length">select a customer</div>';
+						str += '		<div class="col-9" ng-if="selectedCustomer && !loading">';
+
+						var detailCard = bootstrap4.address({
+									title: '{{selectedCustomer.customerName}}',
+									street: '{{selectedCustomer.addressLine1}} {{selectedCustomer.addressLine2}}',
+									city: '{{selectedCustomer.city}}',
+									state: '{{selectedCustomer.state}} , {{selectedCustomer.country}}',
+									phone: '{{selectedCustomer.phone}}'
+						});
+
+						detailCard += bootstrap4.contact({
+									title: '{{selectedCustomer.contactFirstName}} {{selectedCustomer.contactLastName}}'
+						});
+
+						detailCard += _this.customersDetails();
+
+						str += bootstrap4.card({
+									body: detailCard
+						});
+						str += '		</div>';
+						str += '	</div>';
+						str += '</div>';
+						return str;
+			};
+
+			this.customersDetails = function () {
+						var str = '';
+
+						str += '<spinner ng-if="loadingOrder"></spinner>';
+						str += '<article class="text-center text-muted text-capitalize" ng-if="!selectedCustomer.orders.data.length && !loadingOrder">no orders found</article>';
+						str += '<article ng-if="selectedCustomer.orders.data.length && !loadingOrder">';
+
+						str += '<div class="row">';
+						str += '</div>';
+						str += '<div class="row">';
+
+						str += bootstrap4.table('selectedCustomer.orders.data');
+
+						//str += '</div>';
+						str += '</div>';
+						str += '</aritcle>';
+
+						return str;
+			};
+});
 
 /***/ }),
 /* 118 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\services\\authdata.js'");
+
+
+/**
+ * @ngdoc service
+ * @name nimbusEmsApp.auth
+ * @description
+ * # auth
+ * Service in the jsonarApp.
+ */
+
+angular.module('jsonarApp').service('authdata', function ($localStorage, $rootScope, $auth, $http) {
+	this.login = function (creds) {
+		return $auth.login(creds);
+	};
+
+	this.clearUser = function () {
+		delete $localStorage.auth;
+		delete $rootScope.user;
+		delete $http.defaults.headers.common.Authorization;
+	};
+
+	this.setUser = function (user) {
+		$localStorage.auth = JSON.stringify(user);
+		$rootScope.user = user || false;
+	};
+});
 
 /***/ }),
 /* 119 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\services\\modal.js'");
+
+
+/**
+ * @ngdoc service
+ * @name nimbusEmsApp.auth
+ * @description
+ * # auth
+ * Service in the jsonarApp.
+ */
+
+angular.module('jsonarApp').service('modal', function (bootstrap4, $compile, $q) {
+	var _this = this;
+
+	this.modal = function (attrs, $scope) {
+
+		var deferred = $q.defer();
+
+		angular.element('body').append($compile(_this.template(attrs))($scope));
+
+		deferred.resolve(true);
+
+		angular.element('#modal').modal('show').on('hidden.bs.modal', function () {
+			this.remove();
+		});
+
+		return deferred.promise;
+	};
+
+	this.template = function (attrs) {
+		var str = '';
+		str += '<div id="modal" class="modal fade" tabindex="-1" role="dialog">';
+		str += '<div class="modal-dialog ' + (attrs.type === 'small' ? 'modal-sm' : attrs.type === 'large ' ? 'modal-lg' : '') + '" role="document">';
+		str += '<div class="modal-content">';
+		str += '<div class="modal-header bg-primary text-white">';
+		str += attrs.title ? '<h5 class="modal-title">' + attrs.title + '</h5>' : '';
+		str += '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+		str += '</div>';
+		str += attrs.body ? '<div class="modal-body p-0">' + attrs.body + '</div>' : '';
+		str += attrs.footer ? '<div class="modal-footer">' + attrs.footer + '</div>' : '';
+		str += '</div>';
+		str += '</div>';
+		str += '</div>';
+		return str;
+	};
+});
 
 /***/ }),
 /* 120 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\directives\\customers.js'");
+
+/**
+ * @ngdoc directive
+ * @name jsonarApp.directive:customers
+ * @description
+ * # customers
+ */
+
+angular.module('jsonarApp').directive('customers', function (customer) {
+	return {
+		scope: true,
+		controller: function controller($scope, customer, bootstrap4, alert, $compile, modal) {
+			$scope.loading = $scope.loadingOrder = $scope.selectedCustomer = false;
+
+			$scope.init = function () {
+				$scope.loading = true;
+				customer.getCustomers().then(function (result) {
+					$scope.loading = false;
+					$scope.customers = result.data;
+					$scope.view($scope.customers.data[0]);
+				}).catch(function (error) {
+					$scope.loading = false;
+					//do something
+					console.log('getCustomers error', error);
+				});
+			};
+
+			$scope.view = function (c) {
+
+				//console.log('view',c);
+
+				$scope.selectedCustomer = c;
+				$scope.loadingOrder = true;
+				customer.getOrders(c.customerNumber).then(function (result) {
+					$scope.selectedCustomer.orders = result.data;
+					$scope.loadingOrder = false;
+					//console.log('customer order',result);
+				}).catch(function (error) {
+					//show pop up
+					console.log('getOrders error', error);
+					$scope.loadingOrder = false;
+				});
+			};
+
+			$scope.details = function (order, key) {
+
+				var loop = '',
+				    body = '';
+
+				//console.log('details',order,key);
+
+				loop += '<li class="uk-clearfix list-group-item" ng-repeat="(key,value) in selectedCustomer.orders.data[' + key + '].details.product">';
+				loop += '<div class="float-left text-uppercase text-muted">{{ key }}</div>';
+				loop += '<div class="float-right">{{ value }}</div>';
+				loop += '</li>';
+
+				/*body += bootstrap4.address({
+    			title:'{{selectedCustomer.customerName}}',
+    			street:'{{selectedCustomer.addressLine1}} {{selectedCustomer.addressLine2}}',
+    			city:'{{selectedCustomer.city}}',
+    			state:'{{selectedCustomer.state}} , {{selectedCustomer.country}}',
+    			phone:'{{selectedCustomer.phone}}'
+    		});*/
+
+				body += bootstrap4.list({
+					ul_class: 'class="list-group list-group-flush"',
+					loop: loop
+				});
+
+				modal.modal({
+					title: '{{\'product details\' | uppercase }}',
+					body: body
+				}, $scope).then(function () {});
+			};
+
+			$scope.init();
+		},
+
+		template: customer.customersTemplate(),
+		restrict: 'E',
+		link: function postLink(scope, element) {
+			element.on('$destroy', function () {
+				scope.$destroy();
+			});
+		}
+	};
+});
 
 /***/ }),
 /* 121 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\directives\\spinner.js'");
+
+/**
+ * @ngdoc directive
+ * @name jsonarApp.directive:spinner
+ * @description
+ * # customers
+ */
+
+angular.module('jsonarApp').directive('spinner', function () {
+	return {
+		template: '<div class="spinner"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div>',
+		//template:'show spinner',
+		restrict: 'E'
+	};
+});
 
 /***/ }),
 /* 122 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\directives\\navbar.js'");
+
+/**
+ * @ngdoc directive
+ * @name jsonarApp.directive:navbar
+ * @description
+ * # customers
+ */
+
+angular.module('jsonarApp').directive('navbar', function () {
+	var template = '<nav class="navbar navbar-dark bg-primary">';
+	template += '	<div class="container">';
+	template += '		<a class="navbar-brand text-capitalize" href="#">customer directory</a>';
+	template += '		<form class="form-inline">';
+	template += '		<button class="btn btn-outline-light my-2 my-sm-0 text-uppercase" ng-click="logout()" ng-if="auth.isAuthenticated()">logout {{ user.username }}</button>';
+	template += '		</form>';
+	template += '	</div>';
+	template += '</nav>';
+
+	return {
+		template: template,
+		scope: true,
+		controller: function controller($scope, $auth, $localStorage, authdata, $rootScope, $state) {
+			console.log('navbar', $rootScope, $localStorage);
+			$scope.auth = $auth;
+			$scope.user = $auth.isAuthenticated() ? JSON.parse($localStorage.auth) : false;
+			$scope.logout = function () {
+				$auth.logout();
+				authdata.clearUser();
+				$state.go('/login');
+			};
+		},
+		restrict: 'E',
+		link: function postLink(scope, element) {
+			element.on('$destroy', function () {
+				scope.$destroy();
+			});
+		}
+	};
+});
 
 /***/ }),
 /* 123 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\factories\\bootstrap4.js'");
+
+
+/**
+ * @ngdoc service
+ * @name nimbusEmsApp.bootstrap
+ * @description
+ * # bootstrap
+ * Service in the jsonarApp.
+ */
+
+angular.module('jsonarApp').factory('bootstrap4', function () {
+	return {
+		input: function input(attrs) {
+
+			var str = '<input ';
+			str += attrs.attributes ? attrs.attributes : 'type="text"';
+			str += ' >';
+
+			return str;
+		},
+		list: function list(attrs) {
+
+			var str = '<ul ';
+			str += attrs.ul_class ? attrs.ul_class : 'class="list-group"';
+			str += ' >';
+			str += attrs.loop ? attrs.loop : '';
+			str += '</ul>';
+
+			return str;
+		},
+		listLink: function listLink(attrs) {
+
+			var str = '<div class="list-group">';
+			str += attrs.loop ? attrs.loop : '';
+			str += '</div>';
+
+			return str;
+		},
+		card: function card(_card) {
+			var str = '';
+
+			str += '<div class="card ';
+			str += _card.class ? _card.class : '';
+			str += '">';
+			str += _card.header ? '<div class="card-header">' + _card.header + '</div>' : '';
+			str += '	<div class="card-body">';
+			str += _card.title ? '<h5 class="card-title">' + _card.title + '</h5>' : '';
+			str += _card.body ? _card.body : '';
+			str += '	</div>';
+			str += '</div>';
+
+			return str;
+		},
+		address: function address(contact) {
+			var str = '';
+
+			str += '<address>';
+			str += contact.title ? '<strong>' + contact.title + '</strong><br>' : '';
+			str += contact.street ? contact.street + '<br>' : '';
+			str += contact.city ? contact.city + ',' : '';
+			str += contact.state ? contact.state : '';
+			str += contact.city || contact.state ? ' <br>' : '';
+			str += contact.postalCode ? contact.postalCode + '<br>' : '';
+			if (typeof contact.phones === 'array') {
+				contact.phones.forEach(function (c) {
+					str += c ? '<abbr title="Phone">P:</abbr> ' + c : '';
+				});
+			} else {
+				str += contact.phone ? '<abbr title="Phone">P:</abbr> ' + contact.phone : '';
+			}
+
+			str += '</address>';
+
+			return str;
+		},
+		contact: function (_contact) {
+			function contact(_x) {
+				return _contact.apply(this, arguments);
+			}
+
+			contact.toString = function () {
+				return _contact.toString();
+			};
+
+			return contact;
+		}(function (person) {
+			var str = '';
+
+			str += '<address>';
+			str += person.title ? '<strong>' + person.title + '</strong><br>' : '';
+			str += person.href || person.contact ? '<a href="' + (person.href ? contact.href : '') + '">' + (person.contact ? person.contact : '') + '</a>' : '';
+
+			str += '</address>';
+
+			return str;
+		}),
+		collapse: function collapse() {},
+		table: function table(key) {
+			var header = '<table class="table table-hover col-12">',
+			    body = '';
+
+			header += '<thead>';
+			//body += '<tr><th ng-repeat="(key,header) in '+key+'[0]">{{key | uppercase }}</th></tr>';
+			body += '<tr>';
+			body += '	<th>{{\'order number\'|uppercase}}</th>';
+			body += '	<th>{{\'order date\'|uppercase}}</th>';
+			body += '	<th>{{\'order status\'|uppercase}}</th>';
+			body += '	<th>{{\'required date\'|uppercase}}</th>';
+			body += '	<th>{{\'comments\'|uppercase}}</th>';
+			body += '</tr>';
+			header += '</thead>';
+			body += '<tbody>';
+			//body += '<tr ng-repeat="order in '+key+'" ng-click="details(order,$index)"><td ng-repeat="(key,item) in order">{{ item }}</td></tr>';
+
+			body += '<tr ng-repeat="order in ' + key + '" ng-click="details(order,$index)">';
+			body += '	<td>{{ order.orderNumber }}</td>';
+			body += '	<td>{{ order.orderDate }}</td>';
+			body += '	<td>{{ order.status }}</td>';
+			body += '	<td>{{ order.requiredDate }}</td>';
+			body += '	<td>{{ order.comments }}</td>';
+			body += '</tr>';
+
+			body += '</tbody>';
+			body += '</table>';
+
+			return header + body;
+		},
+		search: function search(attrs) {
+			var search = '';
+
+			search += '<form class="form-inline mb-4">';
+			search += '  <input class="form-control mr-sm-2 col-12" type="search" placeholder="Search" aria-label="Search"';
+			search += attrs.attributes ? attrs.attributes : '';
+			search += '	>';
+			search += '</form>';
+
+			return search;
+		}
+	};
+});
 
 /***/ }),
 /* 124 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-throw new Error("Module build failed: Error: ENOENT: no such file or directory, open 'C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\js\\factories\\alert.js'");
+
+
+/**
+ * @ngdoc service
+ * @name nimbusEmsApp.customerui
+ * @description
+ * # customerui
+ * Service in the jsonarApp.
+ */
+
+angular.module('jsonarApp').factory('alert', function (bootstrap4, $window) {
+	return {
+		alert: function alert() {
+			var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+			return $window.swal(attrs);
+		},
+		button: function button(attrs) {
+			return {
+				text: attrs.text || '',
+				value: attrs.value || false,
+				visible: true,
+				className: attrs.className || "btn btn-primary",
+				closeModal: true
+			};
+		}
+	};
+});
 
 /***/ }),
 /* 125 */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed: ModuleBuildError: Module build failed: \r\nundefined\r\n^\r\n      File to import not found or unreadable: C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\sass\\_login.scss.\r\n      in C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\resources\\assets\\sass\\app.scss (line 17, column 1)\n    at runLoaders (C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\node_modules\\webpack\\lib\\NormalModule.js:193:19)\n    at C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\node_modules\\loader-runner\\lib\\LoaderRunner.js:364:11\n    at C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\node_modules\\loader-runner\\lib\\LoaderRunner.js:230:18\n    at context.callback (C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\node_modules\\loader-runner\\lib\\LoaderRunner.js:111:13)\n    at Object.asyncSassJobQueue.push [as callback] (C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\node_modules\\sass-loader\\lib\\loader.js:55:13)\n    at Object.done [as callback] (C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\node_modules\\neo-async\\async.js:7974:18)\n    at options.error (C:\\Users\\Anthony\\Documents\\GitHub\\jsonar\\node_modules\\node-sass\\lib\\index.js:294:32)");
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
