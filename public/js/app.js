@@ -93646,6 +93646,7 @@ angular.module('jsonarApp').directive('navbar', function () {
 			$scope.logout = function () {
 				$auth.logout();
 				authdata.clearUser();
+				delete $scope.user;
 				$state.go('/login');
 			};
 		},

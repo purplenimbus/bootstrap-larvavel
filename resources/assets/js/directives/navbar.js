@@ -26,6 +26,7 @@ angular.module('jsonarApp')
 				$scope.logout = () => {
 					$auth.logout();
 					authdata.clearUser();
+					delete $scope.user;
 					$state.go('/login');
 				}
 
