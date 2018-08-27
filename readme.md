@@ -1,11 +1,11 @@
 # Customer Directory Application
-Angular JS search directive powered by Google Search Places API
 
 ## Build & development
 
-Run `npm install && bower install` to install dependencies
+Run `composer install` to install laravel dependencies
 
-Run `npm install grunt && npm install grunt-cli` to install grunt
+Run `npm run build` to install grunt
+>>>>>>> dev
 
 Run `grunt build` to build and `grunt serve` to launch the application.
 

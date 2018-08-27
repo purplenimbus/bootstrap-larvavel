@@ -93362,14 +93362,14 @@ angular.module('jsonarApp').service('customer', function ($http, bootstrap4) {
 						str += '<spinner ng-if="loading"></spinner>';
 						str += '<div>';
 						str += '	<div class="row">';
-						str += '		<div class="col-3" ng-if="!customers.data.length && !loading">no customers found</div>';
+						str += '		<div class="col-3 text-center text-muted text-capitalize" ng-if="!customers.data.length && !loading">no customers found</div>';
 						str += '		<div class="col-3" ng-if="customers.data.length">';
 						str += bootstrap4.search({ attributes: 'ng-model="search"' });
 						str += bootstrap4.listLink({
 									loop: '<a class="list-group-item list-group-item-action" ng-class="selectedCustomer.customerNumber === customer.customerNumber ? \'active text-white font-weight-bold\' : \'\' " ng-repeat="customer in customers.data | filter:search" ng-click="view(customer)">{{customer.customerName}}</a>'
 						});
 						str += '		</div>';
-						str += '		<div class="col-9" ng-if="!selectedCustomer && customers.data.length">select a customer</div>';
+						str += '		<div class="col-9 text-center text-muted text-capitalize" ng-if="!selectedCustomer && customers.data.length">select a customer</div>';
 						str += '		<div class="col-9" ng-if="selectedCustomer && !loading">';
 
 						var detailCard = bootstrap4.address({
