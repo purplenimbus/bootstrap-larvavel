@@ -74,6 +74,7 @@ angular.module('jsonarApp')
 			var str = '';
 
 			str += '<spinner ng-if="loadingOrder"></spinner>';
+			str += '<article class="text-center text-muted text-capitalize" ng-if="!selectedCustomer.orders.data.length && !loadingOrder">no orders found</article>';
 			str += '<article ng-if="selectedCustomer.orders.data.length && !loadingOrder">';
 
 			str += '<div class="row">';
