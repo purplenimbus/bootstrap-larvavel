@@ -9,7 +9,7 @@ angular.module('jsonarApp')
 	.directive('navbar', function () {
 		var template = 	'<nav class="navbar navbar-dark bg-primary">';
 			template += '	<div class="container">';
-  			template +=	'		<a class="navbar-brand text-capitalize" href="#">customer directory</a>';
+  			template +=	'		<a class="navbar-brand text-capitalize" href="#">Jobs</a>';
     		template += '		<form class="form-inline">';
     		template += '		<button class="btn btn-outline-light my-2 my-sm-0 text-uppercase" ng-click="logout()" ng-if="auth.isAuthenticated()">logout {{ user.username }}</button>';
     		template += '		</form>';

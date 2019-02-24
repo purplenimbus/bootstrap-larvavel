@@ -11,15 +11,12 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $users = [[
-        	'username' => 'test1',
-        	'email' => 'test1@mytest.com',
-        	'password' => app('hash')->make('test1@mytest.com')
-        ],[
-        	'username' => 'test2',
-        	'email' => 'test2@mytest.com',
-        	'password' => app('hash')->make('test2@mytest.com')
-        ]];
+        $users = [
+            [
+            	'email' => 'anthony.akpan@hotmail.com',
+            	'password' => app('hash')->make('easier')
+            ]
+        ];
 
         foreach($users as $user){
         	$user = App\User::create($user);

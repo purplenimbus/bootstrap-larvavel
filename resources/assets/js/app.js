@@ -45,7 +45,7 @@ angular.module('jsonarApp', [
 		 
 		function _redirectAuth($q, $state, $auth,$timeout) {
 		  var defer = $q.defer();
-		  console.log('_redirectAuth',$auth.isAuthenticated());
+
 		  if($auth.isAuthenticated()) {
 		    defer.resolve(); 
 		  } else {
@@ -58,15 +58,15 @@ angular.module('jsonarApp', [
 		}
 
 		$stateProvider
-	    .state('/customers', {
-	    	url : '/customers',
+	    .state('/', {
+	    	url : '/',
 	        templateUrl : 'js/views/main.html',
 	        controller : 'MainCtrl',
 	        controllerAs : 'main',
 	        resolve : {
 	        	redirectAuth: _redirectAuth
 	        },
-	        class:'customers'
+	        class:'home'
 	    })
 	    .state('/login', {
 	    	url : '/',

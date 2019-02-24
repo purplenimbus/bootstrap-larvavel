@@ -16,10 +16,8 @@ mix.js('resources/assets/js/app.js', 'public/js')
    .js([
    		'resources/assets/js/controllers/main.js',
          'resources/assets/js/controllers/auth.js',
-   		'resources/assets/js/services/customer.js',
          'resources/assets/js/services/authdata.js',
          'resources/assets/js/services/modal.js',
-   		'resources/assets/js/directives/customers.js',
          'resources/assets/js/directives/spinner.js',
          'resources/assets/js/directives/navbar.js',
    		'resources/assets/js/factories/bootstrap4.js',

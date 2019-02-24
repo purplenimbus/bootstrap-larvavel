@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTFactory;
-use App\Tenant as Tenant;
 use App\User as User;
 use Illuminate\Http\Request;
 
@@ -42,8 +41,7 @@ class LoginController extends Controller
     public function authenticate(Request $request)
     {
         
-        $credentials = $request->only('username', 'password');
-
+        $credentials = $request->only('email', 'password');
         try {
             // verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {

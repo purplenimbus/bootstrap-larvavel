@@ -22,7 +22,7 @@ angular.module('jsonarApp')
 
  					if(result.data.user){ authdata.setUser(result.data.user); }
 
- 					$state.go('/customers');
+ 					$state.go('/');
  				})
  				.catch((error) => {
  					$scope.loading = false;
