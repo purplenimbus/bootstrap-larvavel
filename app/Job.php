@@ -14,11 +14,13 @@ class Job extends Model
      */
     protected $fillable = [
         'author_id',
+        'category_id',
         'company_id',
 		'description',
 		'meta',
 		'status_id',
 		'title',
+        'type_id',
     ];
 
     /**
@@ -48,5 +50,9 @@ class Job extends Model
 
     function job_status(){
         return $this->belongsTo('App\JobStatus','status_id');
+    }
+
+    function job_type(){
+        return $this->belongsTo('App\JobType','type_id');
     }
 }

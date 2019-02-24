@@ -17,12 +17,14 @@ class CreateJobsTable extends Migration
             $table->increments('id');
             $table->longText('description');
             $table->json('meta')->nullable();
-            $table->uuid('uuid');
             $table->integer('author_id');
             $table->integer('company_id');
+            $table->integer('category_id')->default(1);
+            $table->integer('type_id')->default(1);
             $table->integer('status_id')->default(1);
             $table->string('title');
             $table->timestamps();
+            $table->uuid('uuid');
         });
     }
 

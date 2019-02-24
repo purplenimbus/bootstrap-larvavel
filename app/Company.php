@@ -13,6 +13,7 @@ class Company extends Model
      * @var array
      */
     protected $fillable = [
+        'category_id',
         'name',
 		'description',
 		'meta',
@@ -36,5 +37,10 @@ class Company extends Model
 		self::creating(function ($model) {
 			$model->uuid = (string) Uuid::generate(4);
 		});
+	}
+
+	/* Relationships */
+	function category(){
+		return $this->belongsTo('App\CompanyCategory');
 	}
 }
