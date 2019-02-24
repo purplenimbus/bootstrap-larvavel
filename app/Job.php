@@ -24,6 +24,19 @@ class Job extends Model
     ];
 
     /**
+     * The attributes that are hidden.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'author_id',
+        'category_id',
+        'company_id',
+        'status_id',
+        'type_id',
+    ];
+
+    /**
      * Cast meta property to array
      *
      * @var array
@@ -44,15 +57,24 @@ class Job extends Model
 	}
 
 	/* Relationships */
+
+    function author(){
+        return $this->belongsTo('App\User');
+    }
+
+    function category(){
+        return $this->belongsTo('App\JobCategory');
+    }
+
 	function company(){
 		return $this->belongsTo('App\Company');
 	}
 
-    function job_status(){
+    function status(){
         return $this->belongsTo('App\JobStatus','status_id');
     }
 
-    function job_type(){
+    function type(){
         return $this->belongsTo('App\JobType','type_id');
     }
 }

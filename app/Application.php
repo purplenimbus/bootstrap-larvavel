@@ -15,6 +15,7 @@ class Application extends Model
     protected $fillable = [
         'applicant_id',
         'job_id',
+        'status_id',
     ];
 
     /**
@@ -27,4 +28,9 @@ class Application extends Model
 			$model->uuid = (string) Uuid::generate(4);
 		});
 	}
+
+	/* Relationships */
+    function status(){
+        return $this->belongsTo('App\ApplicationStatus','status_id');
+   
 }

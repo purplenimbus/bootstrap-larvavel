@@ -36,5 +36,16 @@ class OtherSeeder extends Seeder
         foreach($company_categories as $category){
             App\CompanyCategory::create(['name' => $category]);
         }
+
+        $application_status_types = [
+            [   'name' => 'applied' ],
+            [   'name' => 'viewed' ],
+            [   'name' => 'rejected' ],
+            [   'name' => 'approved' ],
+        ];
+        
+        foreach($application_status_types as $status_type){
+            App\ApplicationStatus::create($status_type);
+        }
     }
 }

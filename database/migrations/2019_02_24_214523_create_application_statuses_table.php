@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateApplicationsTable extends Migration
+class CreateApplicationStatusesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateApplicationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('applications', function (Blueprint $table) {
+        Schema::create('application_statuses', function (Blueprint $table) {
+            $table->text('description')->nullable();
             $table->increments('id');
-            $table->integer('applicant_id');
-            $table->integer('job_id');
-            $table->integer('status_id');
+            $table->text('name');
             $table->timestamps();
-            $table->uuid('uuid');
         });
     }
 
@@ -30,6 +28,6 @@ class CreateApplicationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applications');
+        Schema::dropIfExists('application_statuses');
     }
 }
