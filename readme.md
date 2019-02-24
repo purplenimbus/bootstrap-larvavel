@@ -1,4 +1,4 @@
-# Customer Directory Application
+# Laravel + Bootstrap 4 + Vue.js Starter Template
 
 Customer directory application to view customer , order and product information.
 
